@@ -25,8 +25,15 @@ function editItem() {
   console.log("edited");
 }
 //delete item
-function editItem() {
-  console.log("edited");
+function deleteItem(e) {
+  const element = e.currentTarget.parentElement.parentElement;
+  list.removeChild(element);
+
+  if (list.children.length === 0) {
+    container.classList.remove("show-container");
+  }
+  displayAlert("item Deleted", "danger");
+  setbackToDefault();
 }
 
 //clear items
@@ -68,8 +75,8 @@ function addItem(e) {
                 <i class="fas fa-trash"></i>
               </button>
             </div>`;
-    const deleteBtn = document.querySelector(".delete-btn");
-    const editBtn = document.querySelector(".edit-btn");
+    const deleteBtn = element.querySelector(".delete-btn");
+    const editBtn = element.querySelector(".edit-btn");
 
     deleteBtn.addEventListener("click", deleteItem);
     editBtn.addEventListener("click", editItem);
