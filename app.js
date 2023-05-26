@@ -1,7 +1,6 @@
 // ****** SELECT ITEMS **********
 const alert = document.querySelector(".alert");
 const form = document.querySelector(".grocery-form");
-console.log(form);
 const grocery = document.getElementById("grocery");
 const submitBtn = document.querySelector(".submit-btn");
 const container = document.querySelector(".grocery-container");
@@ -9,7 +8,7 @@ const list = document.querySelector(".grocery-list");
 const clearBtn = document.querySelector(".clear-btn");
 
 // edit option
-let ediElement;
+let editElement;
 let editFlag = false;
 let editId = "";
 
@@ -20,35 +19,6 @@ clearBtn.addEventListener("click", clearItems);
 form.addEventListener("submit", addItem);
 
 // ****** FUNCTIONS **********
-//edit item
-function editItem() {
-  console.log("edited");
-}
-//delete item
-function deleteItem(e) {
-  const element = e.currentTarget.parentElement.parentElement;
-  list.removeChild(element);
-
-  if (list.children.length === 0) {
-    container.classList.remove("show-container");
-  }
-  displayAlert("item Deleted", "danger");
-  setbackToDefault();
-}
-
-//clear items
-function clearItems() {
-  const items = document.querySelectorAll(".grocery-item");
-  if (items.length > 0) {
-    items.forEach((item) => {
-      list.removeChild(item);
-    });
-  }
-  container.classList.remove("show-container");
-  displayAlert("Empty List", "danger");
-  setbackToDefault();
-  // localStorage.removeItem("list");
-}
 
 function addItem(e) {
   e.preventDefault();
@@ -57,9 +27,7 @@ function addItem(e) {
   if (value && !editFlag) {
     //add class
     const element = document.createElement("article");
-    console.log(element);
     element.classList.add("grocery-item");
-
     //add id
     const attrbt = document.createAttribute("data-id");
     attrbt.value = id;
@@ -92,7 +60,10 @@ function addItem(e) {
     //set back to default
     setbackToDefault();
   } else if (value && editFlag) {
-    console.log("editing");
+    editElement.innerHTML = value;
+    displayAlert("value changed", "success");
+
+    // setbackToDefault();
   } else {
     displayAlert("Please enter your Values", "danger");
   }
@@ -112,13 +83,53 @@ function displayAlert(text, action) {
 //set Back to deafult
 function setbackToDefault() {
   grocery.value = "";
-
-  let editFlag = false;
-  let editId = "";
+  editFlag = false;
+  editId = "";
   submitBtn.textContent = "Submit";
+}
+
+//delete item
+function deleteItem(e) {
+  const element = e.currentTarget.parentElement.parentElement;
+  const id = element.dataset.id;
+  list.removeChild(element);
+
+  if (list.children.length === 0) {
+    container.classList.remove("show-container");
+  }
+  displayAlert("item Deleted", "danger");
+  setbackToDefault();
+  //remove from local storage
+  //removeFromLocalStorage(id)
+}
+
+//clear items
+function clearItems() {
+  const items = document.querySelectorAll(".grocery-item");
+  if (items.length > 0) {
+    items.forEach((item) => {
+      list.removeChild(item);
+    });
+  }
+  container.classList.remove("show-container");
+  displayAlert("Empty List", "danger");
+  setbackToDefault();
+  // localStorage.removeItem("list");
+}
+
+//edit item
+function editItem(e) {
+  const element = e.currentTarget.parentElement.parentElement;
+  //set edit item
+  editElement = e.currentTarget.parentElement.previousElementSibling;
+  grocery.value = editElement.innerHTML;
+  console.log(grocery.value);
+  //set form value
+  editFlag = true;
+  editId = element.dataset.id;
+  submitBtn.innerHTML = "edit";
 }
 
 // ****** LOCAL STORAGE **********
 function addToLocalStorage() {}
-
-// ****** SETUP ITEMS **********
+function removeFromLocalStorage(id) {}
